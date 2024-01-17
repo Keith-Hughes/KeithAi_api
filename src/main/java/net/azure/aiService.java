@@ -5,7 +5,7 @@ import io.javalin.http.Handler;
 
 public class aiService {
     Javalin app;
-    int defaultPort = 7000;
+    int port = Integer.parseInt(System.getenv().getOrDefault("HTTP_PLATFORM_PORT", "7000"));
 
     public aiService(){
         createServer();
@@ -13,7 +13,7 @@ public class aiService {
     }
 
     private void start(){
-        app.start(defaultPort);
+        app.start(port);
     }
     private void createServer(){
         app = Javalin.create();
