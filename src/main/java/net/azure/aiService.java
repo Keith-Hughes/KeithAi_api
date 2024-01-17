@@ -1,21 +1,28 @@
 package net.azure;
 
 import io.javalin.Javalin;
+import net.azure.aiDO.AiThreadDO;
+import net.azure.aiDO.MessageResponseDO;
+import net.azure.aiDO.MessageResponseListDO;
+import net.azure.aiDO.RunResponseDO;
+
+import java.util.logging.Handler;
 
 public class aiService {
     Javalin app;
     int port = Integer.parseInt(System.getenv().getOrDefault("HTTP_PLATFORM_PORT", "7000"));
     String openAiAPIKey;
+    AiAssistant aiAssistant;
     public aiService(){
         loadConfiguration();
         createServer();
         createEndpoints();
+        this.aiAssistant = new AiAssistant(openAiAPIKey);
     }
 
     private void loadConfiguration() {
         // Load OpenAI API key from environment variables
         openAiAPIKey = System.getenv("OPENAI_API_KEY");
-
 
     }
 
@@ -36,7 +43,13 @@ public class aiService {
     }
 
     private void createEndpoints(){
-        app.get("/key", context -> {context.result(checkKey());});
+        app.get("/ai/{question}", context -> {
+            String question = context.queryParam("question");
+            AiThreadDO conversationThread =aiAssistant.createThread();
+            MessageResponseDO messageResponse =aiAssistant.sendMessage(conversationThread.id(),"user", question);
+            RunResponseDO runResponse = aiAssistant.runMessage(conversationThread.id());
+            MessageResponseListDO messageResponseList = aiAssistant.getMessages(conversationThread.id());
+            context.json(messageResponseList);});
     }
 
 
