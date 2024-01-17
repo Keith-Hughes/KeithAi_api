@@ -1,26 +1,42 @@
 package net.azure;
 
 import io.javalin.Javalin;
-import io.javalin.http.Handler;
 
 public class aiService {
     Javalin app;
     int port = Integer.parseInt(System.getenv().getOrDefault("HTTP_PLATFORM_PORT", "7000"));
-
+    String openAiAPIKey;
     public aiService(){
+        loadConfiguration();
         createServer();
         createEndpoints();
+    }
+
+    private void loadConfiguration() {
+        // Load OpenAI API key from environment variables
+        openAiAPIKey = System.getenv("OPENAI_API_KEY");
+
+
+    }
+
+    private String checkKey(){
+        if (openAiAPIKey == null || openAiAPIKey.isEmpty()) {
+            return "false";
+        }
+        return "true";
     }
 
     private void start(){
         app.start(port);
     }
+
+
     private void createServer(){
         app = Javalin.create();
     }
 
     private void createEndpoints(){
-        app.get("/hello", context -> {context.result("Hello");});
+        app.get("/key", context -> {context.result(checkKey());});
     }
 
 
