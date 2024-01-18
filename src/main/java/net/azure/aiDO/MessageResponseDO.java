@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 public record MessageResponseDO(
+
+        String error,
         String id,
         String object,
         @JsonProperty("created_at")

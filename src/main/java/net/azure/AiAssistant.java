@@ -55,7 +55,6 @@ public class AiAssistant {
     public MessageResponseDO sendMessage(String threadId, String role, String content) throws Exception {
         String url = "https://api.openai.com/v1/threads/" + threadId + "/messages";
         MessageDO dto = new MessageDO(role, content);
-
         String response = post(url, dto);
         return objectMapper.readValue(response, MessageResponseDO.class);
     }
@@ -65,7 +64,23 @@ public class AiAssistant {
         RunRequestDO dto = new RunRequestDO("asst_zrmMSjuP6hVrmtEfnCtn3y14");
 
         String response = post(url, dto);
-        return objectMapper.readValue(response, RunResponseDO.class);
+        RunResponseDO runResponse = objectMapper.readValue(response, RunResponseDO.class);
+        System.out.println("run id: "+runResponse.id());
+        while (!runResponse.status().equalsIgnoreCase("completed")){
+            Thread.sleep(2000);
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url+"/"+runResponse.id()))
+                    .header("Authorization", "Bearer " + openAiKey)
+                    .header("OpenAI-Beta", "assistants=v1")
+                    .header("Content-Type", "application/json")
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response2 = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println("new response: "+response2.body());
+            runResponse = objectMapper.readValue(response2.body(), RunResponseDO.class);
+        }
+        return runResponse;
     }
 
     public MessageResponseListDO getMessages(String threadId) throws Exception {

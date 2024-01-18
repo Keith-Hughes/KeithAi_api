@@ -6,8 +6,6 @@ import net.azure.aiDO.MessageResponseDO;
 import net.azure.aiDO.MessageResponseListDO;
 import net.azure.aiDO.RunResponseDO;
 
-import java.util.logging.Handler;
-
 public class aiService {
     Javalin app;
     int port = Integer.parseInt(System.getenv().getOrDefault("HTTP_PLATFORM_PORT", "7000"));
@@ -44,12 +42,19 @@ public class aiService {
 
     private void createEndpoints(){
         app.get("/ai/{question}", context -> {
-            String question = context.queryParam("question");
+            String question = context.pathParam("question");
             AiThreadDO conversationThread =aiAssistant.createThread();
             MessageResponseDO messageResponse =aiAssistant.sendMessage(conversationThread.id(),"user", question);
             RunResponseDO runResponse = aiAssistant.runMessage(conversationThread.id());
             MessageResponseListDO messageResponseList = aiAssistant.getMessages(conversationThread.id());
-            context.json(messageResponseList);});
+            context.json(messageResponseList
+                    .data()
+                    .get(0)
+                    .content()
+                    .get(0)
+                    .text()
+                    .value());
+        });
     }
 
 
