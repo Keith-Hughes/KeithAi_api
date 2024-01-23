@@ -58,7 +58,7 @@
                     <configuration>
                         <archive>
                             <manifest>
-                                <mainClass>net.azure.aiService</mainClass>
+                                <mainClass>net.azure.AiService</mainClass>
                             </manifest>
                         </archive>
                         <descriptorRefs>
