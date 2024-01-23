@@ -30,7 +30,6 @@ public record RunResponseDO (
         @JsonProperty("last_error")
         String lastError,
         String model,
-        String usage,
         String instructions,
         List<Map<String, String>> tools,
         @JsonProperty("file_ids")
