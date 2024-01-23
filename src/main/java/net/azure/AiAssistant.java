@@ -99,6 +99,17 @@ public class AiAssistant {
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
         return objectMapper.readValue(response.body(), MessageResponseListDO.class);
+    }
 
+    public String executeMessage(String threadID, String question) throws Exception {
+        sendMessage(threadID,"user", question);
+        runMessage(threadID);
+        return getMessages(threadID)
+                .data()
+                .get(0)
+                .content()
+                .get(0)
+                .text()
+                .value();
     }
 }
