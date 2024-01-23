@@ -66,8 +66,9 @@ public class AiAssistant {
         String response = post(url, dto);
         RunResponseDO runResponse = objectMapper.readValue(response, RunResponseDO.class);
         System.out.println("run id: "+runResponse.id());
+
         while (!runResponse.status().equalsIgnoreCase("completed")){
-            Thread.sleep(2000);
+
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url+"/"+runResponse.id()))
                     .header("Authorization", "Bearer " + openAiKey)
@@ -75,10 +76,11 @@ public class AiAssistant {
                     .header("Content-Type", "application/json")
                     .GET()
                     .build();
-
+            Thread.sleep(3000);
             HttpResponse<String> response2 = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println("new response: "+response2.body());
             runResponse = objectMapper.readValue(response2.body(), RunResponseDO.class);
+
         }
         return runResponse;
     }

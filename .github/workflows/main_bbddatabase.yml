@@ -28,7 +28,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: java-app
-          path: '${{ github.workspace }}/target/*.jar'
+          path: '${{ github.workspace }}/target/database_api-1.0-SNAPSHOT-jar-with-dependencies.jar'
 
   deploy:
     runs-on: windows-latest
