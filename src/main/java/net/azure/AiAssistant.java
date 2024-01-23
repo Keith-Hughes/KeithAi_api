@@ -104,6 +104,7 @@ public class AiAssistant {
     public String executeMessage(String threadID, String question) throws Exception {
         sendMessage(threadID,"user", question);
         runMessage(threadID);
+        System.out.println("Thread ID: "+threadID);
         return getMessages(threadID)
                 .data()
                 .get(0)
