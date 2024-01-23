@@ -64,6 +64,7 @@ public class AiAssistant {
         RunRequestDO dto = new RunRequestDO("asst_zrmMSjuP6hVrmtEfnCtn3y14");
 
         String response = post(url, dto);
+        System.out.println("run response: "+response);
         RunResponseDO runResponse = objectMapper.readValue(response, RunResponseDO.class);
         System.out.println("run id: "+runResponse.id());
 
