@@ -11,28 +11,14 @@ import java.util.Map;
 
 public class AiService {
     Javalin app;
-    int port = Integer.parseInt(System.getenv().getOrDefault("HTTP_PLATFORM_PORT", "7000"));
-    String openAiAPIKey;
+    int port = Integer.parseInt(System.getenv().getOrDefault("HTTP_PLATFORM_PORT", "8080"));
     AiAssistant aiAssistant;
     public AiService(){
-        loadConfiguration();
         createServer();
         createEndpoints();
-        this.aiAssistant = new AiAssistant(openAiAPIKey);
+        this.aiAssistant = new AiAssistant(System.getenv("OPENAI_API_KEY"));
     }
 
-    private void loadConfiguration() {
-        // Load OpenAI API key from environment variables
-        openAiAPIKey = System.getenv("OPENAI_API_KEY");
-
-    }
-
-    private String checkKey(){
-        if (openAiAPIKey == null || openAiAPIKey.isEmpty()) {
-            return "false";
-        }
-        return "true";
-    }
 
     private void start(){
         app.start(port);
