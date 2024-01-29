@@ -50,7 +50,16 @@ public class AiService {
                 context.json(jsonResponse);
 
 
-            });
+            }).get("/ai/thread", context -> {
+                    AiThreadDO conversationThread =aiAssistant.createThread();
+                    Map<String, Object> jsonResponse = new HashMap<>();
+                    jsonResponse.put("threadId", conversationThread.id());
+                    context.json(jsonResponse);
+
+
+
+                });
+
     }
 
 
