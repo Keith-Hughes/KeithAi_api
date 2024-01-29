@@ -1,6 +1,7 @@
 package net.azure;
 
 import io.javalin.Javalin;
+import io.javalin.apibuilder.EndpointGroup;
 import net.azure.aiDO.AiThreadDO;
 import net.azure.aiDO.MessageResponseDO;
 import net.azure.aiDO.MessageResponseListDO;
@@ -15,8 +16,12 @@ public class AiService {
     AiAssistant aiAssistant;
     public AiService(){
         createServer();
-        createEndpoints();
         this.aiAssistant = new AiAssistant(System.getenv("OPENAI_API_KEY"));
+        AiController.setAssistant(aiAssistant);
+        EndPoints.configure(this);
+    }
+    public void routes(EndpointGroup group) {
+        app.routes(group);
     }
 
 
@@ -27,39 +32,6 @@ public class AiService {
 
     private void createServer(){
         app = Javalin.create();
-    }
-
-    private void createEndpoints(){
-        app
-            .get("/ai/{question}", context -> {
-                String question = context.pathParam("question");
-                AiThreadDO conversationThread =aiAssistant.createThread();
-                String responseText= aiAssistant.executeMessage(conversationThread.id(), question);
-
-                Map<String, Object> jsonResponse = new HashMap<>();
-                jsonResponse.put("response", responseText);
-                jsonResponse.put("threadId", conversationThread.id());
-                context.json(jsonResponse);
-            })
-            .get("/ai/{question}/{threadID}", context -> {
-                String question = context.pathParam("question");
-                String threadID = context.pathParam("threadID");
-                String responseText= aiAssistant.executeMessage(threadID, question);
-                Map<String, Object> jsonResponse = new HashMap<>();
-                jsonResponse.put("response", responseText);
-                context.json(jsonResponse);
-
-
-            }).get("/ai/thread", context -> {
-                    AiThreadDO conversationThread =aiAssistant.createThread();
-                    Map<String, Object> jsonResponse = new HashMap<>();
-                    jsonResponse.put("threadId", conversationThread.id());
-                    context.json(jsonResponse);
-
-
-
-                });
-
     }
 
 
