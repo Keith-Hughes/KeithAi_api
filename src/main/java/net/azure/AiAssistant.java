@@ -14,7 +14,9 @@ public class AiAssistant {
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
     String openAiKey;
-    public AiAssistant(String apiKey) {
+    String assistantID;
+    public AiAssistant(String apiKey, String AssistantID) {
+        this.assistantID = AssistantID;
         this.openAiKey = apiKey;
         this.httpClient = HttpClient.newHttpClient();
         this.objectMapper = new ObjectMapper();
@@ -61,7 +63,7 @@ public class AiAssistant {
 
     public RunResponseDO runMessage(String threadId) throws Exception {
         String url = "https://api.openai.com/v1/threads/" + threadId + "/runs";
-        RunRequestDO dto = new RunRequestDO("asst_zrmMSjuP6hVrmtEfnCtn3y14");
+        RunRequestDO dto = new RunRequestDO(assistantID);
 
         String response = post(url, dto);
         System.out.println("run response: "+response);
