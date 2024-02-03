@@ -14,9 +14,10 @@ public class AiService {
     Javalin app;
     int port = Integer.parseInt(System.getenv().getOrDefault("HTTP_PLATFORM_PORT", "8080"));
     AiAssistant aiAssistant;
+    String assistantID = "asst_zrmMSjuP6hVrmtEfnCtn3y14";
     public AiService(){
         createServer();
-        this.aiAssistant = new AiAssistant(System.getenv("OPENAI_API_KEY"));
+        this.aiAssistant = new AiAssistant(System.getenv("OPENAI_API_KEY"), assistantID);
         AiController.setAssistant(aiAssistant);
         EndPoints.configure(this);
     }
