@@ -2,18 +2,17 @@
 
 This project is a Java-based AI service using the OpenAI API for natural language processing.
 
-## Azure Deployment
+## CURRENTLY NOT HOSTED ON ANY SERVER
 
-This AI service is hosted on Azure at [https://bbddatabase.azurewebsites.net/](https://bbddatabase.azurewebsites.net/).
 
 ## Usage
 
 1. **Create a Thread:**
    ```bash
-   curl -X GET https://bbddatabase.azurewebsites.net/ai/thread
+   curl -X GET https://your.domain/ai/thread
 2. **Ask a Question:**
    ```bash
-      curl -X GET https://bbddatabase.azurewebsites.net/ai/{your_question}/{thread_id}
+      curl -X GET https://your.domain/ai/{your_question}/{thread_id}
 
 
 OPENAI_API_KEY: Currently using my api Key but feel free to clone the project and use your own API Key.
